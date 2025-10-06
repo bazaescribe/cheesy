@@ -20,12 +20,11 @@ interface PieceProps {
 export default function Piece({ 
   type, 
   color, 
-  position, 
   isSelected = false, 
   onClick, 
   onDragStart 
 }: PieceProps) {
-  const handleDragStart = (e: React.DragEvent) => {
+  const handleDragStart = () => {
     onDragStart?.()
   }
 
@@ -39,9 +38,6 @@ export default function Piece({
       className={`text-sm text-black font-semibold cursor-grab text-xl w-12 h-12 rounded-full flex items-center justify-center transition-all ${
         isSelected ? 'ring-2 ring-blue-400 scale-110' : ''
       }`}
-      // style={{
-      //   background: color === 'white' ? 'white' : 'black',
-      // }}
       draggable
       onDragStart={handleDragStart}
       onClick={handleClick}

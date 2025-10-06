@@ -55,7 +55,7 @@ export function genStage(seed: number, round: number, army: Array<'P'|'N'|'B'|'R
   for (const kind of army) {
     const sq = playerSlots.pop();
     if (!sq) break;
-    chess.put({ type: kind.toLowerCase() as any, color: 'w' }, sq);
+    chess.put({ type: kind.toLowerCase() as 'p' | 'n' | 'b' | 'r' | 'q', color: 'w' }, sq);
   }
 
   // Ronda 1 especial: agrega un peón si quieres forzar el inicio
@@ -93,7 +93,7 @@ export function genStage(seed: number, round: number, army: Array<'P'|'N'|'B'|'R
     if (!pick) continue;
     if (used + pick.cost > BE) continue;
 
-    chess.put({ type: pick.kind.toLowerCase() as any, color: 'b' }, sq);
+    chess.put({ type: pick.kind.toLowerCase() as 'p' | 'n' | 'b' | 'r' | 'q', color: 'b' }, sq);
 
     // Evita mate en 1 gratis
     if (chess.inCheck()) {
