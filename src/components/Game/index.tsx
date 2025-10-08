@@ -10,7 +10,7 @@ interface Position {
 }
 
 interface PieceData {
-  type: 'pawn'
+  type: 'pawn' | 'king'
   color: 'white' | 'black'
   position: Position
 }
@@ -33,11 +33,21 @@ export default function Game() {
     { type: 'pawn', color: 'black', position: { row: 1, col: 5 } },
     { type: 'pawn', color: 'black', position: { row: 1, col: 6 } },
     { type: 'pawn', color: 'black', position: { row: 1, col: 7 } },
+    { type: 'king', color: 'black', position: { row: 0, col: 4 } },
+    { type: 'king', color: 'white', position: { row: 7, col: 3 } },
   ])
 
+  // Add turn state
+  const [currentTurn, setCurrentTurn] = useState<'white' | 'black'>('white')
+  
   const { selectedPiece, validMoves, selectPiece, clearSelection, isValidMove } = usePieceRules()
 
   const handlePieceClick = (piece: PieceData) => {
+    // Only allow selecting pieces of the current turn's color
+    if (piece.color !== currentTurn) {
+      return // Ignore clicks on opponent's pieces
+    }
+    
     if (
       selectedPiece &&
       selectedPiece.position.row === piece.position.row &&
@@ -53,6 +63,8 @@ export default function Game() {
     if (selectedPiece && isValidMove({ row, col })) {
       movePiece(selectedPiece.position, { row, col })
       clearSelection()
+      // Switch turns after a successful move
+      setCurrentTurn(currentTurn === 'white' ? 'black' : 'white')
     }
   }
 
@@ -73,12 +85,18 @@ export default function Game() {
   }
 
   const handleDragStart = (piece: PieceData) => {
+    // Only allow dragging pieces of the current turn's color
+    if (piece.color !== currentTurn) {
+      return
+    }
     selectPiece(piece, pieces)
   }
 
   const handleDrop = (row: number, col: number) => {
     if (selectedPiece && isValidMove({ row, col })) {
       movePiece(selectedPiece.position, { row, col })
+      // Switch turns after a successful move
+      setCurrentTurn(currentTurn === 'white' ? 'black' : 'white')
     }
     clearSelection()
   }
@@ -86,6 +104,14 @@ export default function Game() {
   return (
     <div className="flex flex-col items-center gap-4">
       <h1 className="text-2xl font-bold">Chess Game</h1>
+      
+      {/* Add turn indicator */}
+      <div className="text-lg font-semibold">
+        Current Turn: <span className={currentTurn === 'white' ? 'text-blue-600' : 'text-red-600'}>
+          {currentTurn.charAt(0).toUpperCase() + currentTurn.slice(1)}
+        </span>
+      </div>
+      
       <Board 
         pieces={pieces}
         selectedPiece={selectedPiece}

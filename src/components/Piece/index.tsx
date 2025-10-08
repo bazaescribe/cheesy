@@ -9,7 +9,7 @@ interface Position {
 }
 
 interface PieceProps {
-  type: 'pawn'
+  type: 'pawn' | 'king'
   color: 'white' | 'black'
   position: Position
   isSelected?: boolean
@@ -33,6 +33,8 @@ export default function Piece({
     onClick?.()
   }
 
+  const pieceSize = 56;
+
   return (
     <div 
       className={`text-sm text-black font-semibold cursor-grab text-xl w-12 h-12 rounded-full flex items-center justify-center transition-all ${
@@ -44,9 +46,14 @@ export default function Piece({
     >
       {type === 'pawn' ? 
         (color === 'white' ? 
-          <Image src="/pieces/white-pawn.png" alt="White Pawn" width={40} height={40} /> 
+          <Image src="/pieces/white-pawn.png" alt="White Pawn" width={pieceSize} height={pieceSize} /> 
         : 
-          <Image src="/pieces/black-pawn.png" alt="Black Pawn" width={40} height={40} />) 
+          <Image src="/pieces/black-pawn.png" alt="Black Pawn" width={pieceSize} height={pieceSize} />) 
+        : type === 'king' ?
+        (color === 'white' ? 
+          <Image src="/pieces/white-king.png" alt="White King" width={pieceSize} height={pieceSize} /> 
+        : 
+          <Image src="/pieces/black-king.png" alt="Black King" width={pieceSize} height={pieceSize} />)
         : ''
       }
     </div>

@@ -9,7 +9,7 @@ interface Position {
 }
 
 interface PieceData {
-  type: 'pawn'
+  type: 'pawn' | 'king'
   color: 'white' | 'black'
   position: Position
 }
